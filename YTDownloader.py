@@ -55,9 +55,8 @@ def main():
     searchResult = dbx.files_search(folderPath, fileName, max_results=1)
 
     print('Like found! Checking against stored URLs..')
-    URLs =  downloadFile(dbx=dbx, folder=folderPath, name=fileName).decode('utf-8').split('\n')
-    #Remove spaces
-    URLs = digest(URLs)
+    URLs =  digest(downloadFile(dbx=dbx, folder=folderPath, name=fileName).decode('utf-8').split('\n'))
+
 
     with open(PREV_TXT_PATH, 'r+') as File:
         contents = digest(File.read().split('\n'))
