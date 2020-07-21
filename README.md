@@ -30,6 +30,7 @@ _That's it!!_
 2. In the python file, there are some variable values that need changing. 
     - Change "DBX_ACCESS_TOKEN" to the value found in your app's settings page, when you click "generate access token"
     - Change "PREV_TXT_PATH" to the path taken to reach your desktop. This is usually `/home/pi/Desktop/previousURLs.txt`
+    - If you wish for the YouTube video to download to a seperate file (not your desktop, so perhaps an external drive or NAS), then change the "DOWNLOAD_PATH" variable from `None` to a string of the desired destination. (eg "/media/Drive5/YouTubeVids")
 3. To allow this code to run automatically and download your YouTube likes, you have to edit the crontab in your pi. Do this by entering the following commands:
     - `sudo crontab -e`
     - If you have never edited your crontab before, it will ask you to choose a text editor to do so. Choose option 1, nano, as this is the easiest. 
