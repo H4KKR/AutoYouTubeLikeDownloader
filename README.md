@@ -17,7 +17,7 @@ The set up process can be broken into three parts
 _That's it!!_
 
 ### IFTTT
-1. Navigate to this page, and set up an IFTTT account if you don't already have one.
+1. Navigate to [this address](https://www.ifttt.com "IFTTT homepage"), and set up an IFTTT account if you don't already have one.
 2. Select "create" in the top right hand corner
 3. Select the "this" button, and search for "YouTube". Click on YouTube, and then click on "New Liked Video"
 4. Select "that", and search for "DropBox". Select "Append to a text file".
