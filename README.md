@@ -1,7 +1,7 @@
 # AutoYouTubeLikeDownloader
 Uses IFTTT, Dropbox and a Raspberry Pi to automatically download and store *new* YouTube videos you've liked. Perfect for automatic data hoarding! 
 
-Alternatiely, this can be used to download a large quantity of YouTube videos without dodgy online websites. Just make a .txt file called 'NewLikedVideo.txt' with seperate hyperlinks on each line. The script will then download them.
+Alternatiely, this can be used to download a large quantity of YouTube videos without dodgy online websites. Just make a .txt file called 'NewLikedVideo.txt' with seperate hyperlinks on each line, then upload to Dropbox in the relevent folder (covered below). The script will then download them.
 
 ## Set Up
 This system requires a bit of setup, but once it's done you'll never have to touch it again!
