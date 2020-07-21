@@ -42,3 +42,5 @@ _That's it!!_
 *Note!* crontab doesn't give errors, or even open a terminal window. It just runs in the background - so there is no way to determine whether the install has been successful unless you run this yourself by typing the command `python3 /home/pi/Desktop/YTDownloader.py`
 
 __Congratulations!!__ You now have an automatic YouTube Video downloader, so you never have to worry about your favourite videos dissapering from the internet. Remember, never repost videos that someone else has made, never monitise someone else's work, keep your videos in your hoard!! And maybe don't press like on that 10 hour remix of your favourite meme. 
+
+DISCLAIMER - Only download videos you have the right to download. That is open-source videos. If you like a video that is copywrited, I will not be held responsible for that and do not condone that type of action. 
