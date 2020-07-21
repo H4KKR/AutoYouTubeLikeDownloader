@@ -12,7 +12,7 @@ The set up process can be broken into three parts
 1. Set up a DropBox account if you haven't already got one.
 2. Head to [this address](https://www.dropbox.com/developer "Dropbox Developer's page"), and click the box in the top right labeled "App Console"
 3. Select "Create App"
-4. Go through the set up process, and make sure to set up the app so that it only has read access to a specific folder.
+4. Go through the set up process, and make sure to set up the app so that it only has read access to a specific folder. The app name needs to be unique (not used by someone else, like YouTube is), and it doesn't matter to the rest of the set up. It can be a random string, or a discriptive name! 
 5. Once your app is created, navigate to the app's page (found under the Apps Console that we went to earlier). Under "settings" scroll to "App Folder Name", and change the name of the folder to "YouTube".
 _That's it!!_
 
