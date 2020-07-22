@@ -1,0 +1,32 @@
+# --- PATH FORMAT ---
+# All paths must be in the format "/something/something else/this is nice.txt"
+# That is, spaces can be included WITHOUT a backslash, and all paths start with 
+# a forward slash
+
+
+# --- CONFIG FILE ---
+# Please populate with data. Instructions are provided.
+
+
+# STORE_SERVICE is the service used to store txt files that are going to be
+# fetched. The options for this are "local" or "Dropbox".
+STORE_SERVICE = "local"
+
+# FETCH_FILE_NAME is the name of the file containing urls that are yet
+# to be downloaded. It can also be a path, if its not in the same directory as 
+# the py file.
+FETCH_FILE_NAME = "BulkVideo.txt"
+
+# If you chose Dropbox earlier, you'll need to change this to your DBX access token
+# Instructions to that are on the github. Otherwise, it doesn't matter. Just make sure
+# that the line still exists (don't delete what's below, or the code will break!!)
+DBX_ACCESS_TOKEN = ""
+
+# This is your local previous urls file path, so where the computer will
+# have to look to make sure it doesn't download duplicates
+PREV_TXT_PATH = "previousURLs.txt"
+
+# If you have a specific local folder you'd like to download to, for example 
+# an exteral harddrive, put the path of that here. If not, it will download to the 
+# same directory as the py file.
+DOWNLOAD_PATH = ""

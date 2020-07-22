@@ -1,12 +1,33 @@
 # AutoYouTubeLikeDownloader
 Uses IFTTT, Dropbox and a Raspberry Pi to automatically download and store *new* YouTube videos you've liked. Perfect for automatic data hoarding! 
 
-Alternatiely, this can be used to download a large quantity of YouTube videos without dodgy online websites. Just make a .txt file called 'NewLikedVideo.txt' with seperate hyperlinks on each line, then upload to Dropbox in the relevent folder (covered below). The script will then download them.
+Alternatiely, this can be used to download a large quantity of YouTube videos without dodgy online websites. Instructions for both options are below!
+
+__DISCLAIMER__ - Only download videos you have the right to download. That is open-source videos. If you like a video that is copywrited, I will not be held responsible for that and do not condone that type of action. 
 
 ## Set Up
 This system requires a bit of setup, but once it's done you'll never have to touch it again!
 
-The set up process can be broken into three parts
+The first method covered will be the hardest, which sets up the script to download new YouTube videos you like. 
+The second method is for bulk downloading YouTube videos from a locally stored list.
+
+Both methods require the same initial setup, covered here:
+1. Use `pip` to install the `pytube3` library, by typing this command:
+`pip install pytube3`
+
+- Unfortunately, the `pytube3` library is a little bit broken - __BUT ONLY IN ONE PLACE!__ I am currently working on rewriting the code to work with a different library, but in the mean time here're the instructions for the work around. 
+
+<details>
+  <summary>More info on bug</summary>
+The devs behind pytube3 are not the most active, and the YouTube site changed which broke the code. For those interested, [here's the StackOverflow]("https://stackoverflow.com/questions/61960657/getting-keyerror-url-with-pytube") of the error you will get if you don't do this really easy fix.
+</details>
+
+1. Type on your command line/terminal `pip show pytube3`, and head to the shown path.
+2. Open the folder "pytube" when in the folder previously shown, and scroll to the py file "extract.py"
+3. Scroll to line 301. Change the word in the square brackets from `["cipher"]` to `["signatureCipher"]`. _That's it!_ You've now solved the problem. 
+
+
+## OPTION 1 - AUTOMATIC YOUTUBE VIDEO DOWNLOADER FROM LIKES
 
 ### Dropbox
 1. Set up a DropBox account if you haven't already got one.
@@ -25,12 +46,14 @@ _That's it!!_
 6. Click all the positive options that follow. (Yes, confirm, etc.)
 _That's it!!_
 
-### Raspberry Pi
-1. Clone this git repository to your pi, and place both the python file and "PreviousURLs.txt" on to the desktop.
-2. In the python file, there are some variable values that need changing. 
-    - Change "DBX_ACCESS_TOKEN" to the value found in your app's settings page, when you click "generate access token"
-    - Change "PREV_TXT_PATH" to the path taken to reach your desktop. This is usually `/home/pi/Desktop/previousURLs.txt`
-    - If you wish for the YouTube video to download to a seperate file (not your desktop, so perhaps an external drive or NAS), then change the "DOWNLOAD_PATH" variable from `None` to a string of the desired destination. (eg "/media/Drive5/YouTubeVids")
+### Raspberry Pi/Computer that is always plugged in
+1. Clone this git repository to your pi, and place all the files on to the desktop.
+2. In the "config.txt" file, there are some settings that need changing. 
+    - Change STORE_SERVICE to "dropbox"
+    - Change FETCH_FILE_NAME to "NewLikedVideo.txt"
+    - Change DBX_ACCESS_TOKEN to the value found in your app's settings page, when you click "generate access token"
+    - Change PREV_TXT_PATH to the path taken to reach your desktop. This is usually `/home/pi/Desktop/previousURLs.txt`
+    - If you wish for the YouTube video to download to a seperate file (not your desktop, so perhaps an external drive or NAS), then change the "DOWNLOAD_PATH" variable from `""` to a string of the desired destination. (eg "/media/Drive5/YouTubeVids")
 3. To allow this code to run automatically and download your YouTube likes, you have to edit the crontab in your pi. Do this by entering the following commands:
     - `sudo crontab -e`
     - If you have never edited your crontab before, it will ask you to choose a text editor to do so. Choose option 1, nano, as this is the easiest. 
@@ -43,4 +66,19 @@ _That's it!!_
 
 __Congratulations!!__ You now have an automatic YouTube Video downloader, so you never have to worry about your favourite videos dissapering from the internet. Remember, never repost videos that someone else has made, never monitise someone else's work, keep your videos in your hoard!! And maybe don't press like on that 10 hour remix of your favourite meme. 
 
-DISCLAIMER - Only download videos you have the right to download. That is open-source videos. If you like a video that is copywrited, I will not be held responsible for that and do not condone that type of action. 
+
+## OPTION 2 - BULK YOUTUBE VIDEO DOWNLOAD FROM LOCAL FILE
+
+1. Clone this git repository to your computer, and place all the files somewhere you know where to find (perhaps Documents or Desktop?).
+2. In the "config.txt" file, there are some settings that need changing. 
+    - Change STORE_SERVICE to "local"
+    - Change FETCH_FILE_NAME to the filename (or path if it is in a seperate directory to the py file) of the txt file holding all of your YouTube links. There needs to be seperate links on new lines.
+    - Change DBX_ACCESS_TOKEN to `""`.
+    - Change PREV_TXT_PATH to the path taken to reach your previousURLs.txt file. This is usually `/home/pi/Desktop/previousURLs.txt`if you put it on a Raspberry Pi's Desktop. This file is required by the program, but it can be empty and its intended purpose not used. 
+    - If you wish for the YouTube video to download to a seperate folder (not in the same directory as the py file, so perhaps an external drive or NAS), then change the "DOWNLOAD_PATH" variable from `""` to a string of the desired destination. (eg "/media/Drive5/YouTubeVids")
+3. Install the `dropbox` and `pytube3` dependencies (even though you're not using the dropbox library, it still needs to be downloaded.) using pip, in the usual fashion.
+4. Navigate to the py file, and run it.
+
+__Congratulations!!__ You now have an easy way to download a lot of YouTube videos at once! Just populate the file however you see fit, however many times you'd like and just keep running the py file to download all your YouTube videos. 
+
+I would really recommed checking out this workaround for how to download your historically liked videos. It involves a chromecast, which if you are lucky enough to have then you can do it! You can then use the `youtube-dl` command line tool to extract the IDs of each of the videos, seen in this tutorial. Then with a script that I will add to the GitHub in a few days, you can convert those IDs into urls which can be downloaded by this Python program in the git already!! Very exciting stuff.
