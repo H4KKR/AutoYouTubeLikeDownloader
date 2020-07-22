@@ -42,8 +42,9 @@ _That's it!!_
 2. Select "create" in the top right hand corner
 3. Select the "this" button, and search for "YouTube". Click on YouTube, and then click on "New Liked Video"
 4. Select "that", and search for "DropBox". Select "Append to a text file".
-5. Under "File Name" enter `NewLikedVideo.txt`, under "Dropbox Folder Path" enter `Apps/YouTube`. Under "content" enter `{{url}}<br>`
-6. Click all the positive options that follow. (Yes, confirm, etc.)
+5. Under "File Name" enter `NewLikedVideo.txt`, under "Dropbox Folder Path" enter `Apps/YouTube`. Note that different language speakers will have to write their translation of the word "Apps". If you're unsure, start from the base directory on Dropbox and click through until you reach "YouTube", and write down the directories you went through. 
+6. Under "content" enter `{{url}}<br>`
+7. Click all the positive options that follow. (Yes, confirm, etc.)
 _That's it!!_
 
 ### Raspberry Pi/Computer that is always plugged in
