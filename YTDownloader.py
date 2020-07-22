@@ -1,7 +1,6 @@
-import os, dropbox, requests, ffmpeg
+import os, dropbox, requests
 from pytube import YouTube
-from pytube.cli import on_progress
-# This code isn't yet commented. I'll go through and do that some other time.
+# This code isn't yet commented. I'll go through and do that some other time. 
 
 digest = lambda URLs: [''.join(i.split()) for i in URLs if i != '']
 
@@ -36,7 +35,7 @@ class DropboxInterface(LocalInterface):
         self.prev_path = prev_path
         self.fetch_data = self.fetchDBFileData(self.fetch_path)
         self.prev_data = fetchFileData(prev_path)
-
+        
     def downloadFile(self, path):
         # This is copied straight from the dropbox sdk docs.
         # If it aint broken, don't fix it!!
@@ -51,9 +50,9 @@ class DropboxInterface(LocalInterface):
 
     def fetchDBFileData(self, fetch_path):
         if fetch_path[0] != "/":
-            fetch_path = "/" + fetch_path
+            fetch_path = "/" + fetch_path 
 
-
+  
         print(fetch_path)
         return self.downloadFile(fetch_path).decode('utf-8').split('\n')
 
@@ -74,53 +73,13 @@ class DropboxInterface(LocalInterface):
             contents = digest(File.read().split('\n'))
 
         #Get rid of previously downloaded videos
-        for x in contents:
+        for x in contents: 
             try: URLs.remove(x)
             except: pass
         print(URLs)
         return URLs
 
-
-def downloadVideoBEST(url, path=None):
-    print(f'DOWNLOADING VIDEO {url}...')
-    print(f'CHECKING VIDEO WITH URL: {url}...')
-    yt = YouTube(url)
-
-    # Prepare temp-dir
-    os.system('mkdir {0}/tmp'.format(path))
-
-    # Replace illegal characters in Windows
-    title = yt.title
-    ys = yt.streams.get_highest_resolution()
-    ys.download(path)
-    illegalchar = '":\\\*<>?|/'
-    translation_table = dict.fromkeys(map(ord, illegalchar), None)
-    title = title.translate(translation_table)
-    print(f'REPLACED ILLEGAL CHARACTERS IN VIDEO TITLE')
-
-    # Download at max resolution whether adaptive or progressive
-    # Video comes without sound. Need to download both
-    print(f'DOWNLOADING VIDEO...')
-    yv = yt.streams.filter(file_extension='mp4').order_by('resolution').last()
-    yv.download('{0}/tmp'.format(path), filename='video')
-
-    # Then download sound
-    print(f'DOWNLOADING AUDIO...')
-    ya = yt.streams.get_audio_only()
-    ya.download('{0}/tmp'.format(path), filename='audio')
-
-    # Splice video and sound together using FFMPEG
-    # !! BEWARE !! UTILIZES CPU 100%
-    va = ffmpeg.input('{0}/tmp/audio.mp4'.format(path))
-    vv = ffmpeg.input('{0}/tmp/video.mp4'.format(path))
-    ffmpeg.concat(vv, va, v=1, a=1).output('{0}/{1}.mp4'.format(path, title)).run()
-
-    # Cleanup temp-files
-    os.system('rm -r {0}/tmp'.format(path))
-
-
-
-def downloadVideoSTABLE(url, path):
+def downloadVideo(url, path):
     print(f'DOWNLOADING VIDEO {url}...')
     yt = YouTube(url)
     title = yt.title
@@ -144,9 +103,9 @@ def fetchConfig(config_file_path="config.txt"):
     contents = digest([i for i in File.read().split('\n') if "#" not in i])
     contents = [i[i.index("\"")+1:-1] for i in contents]
     print(contents)
-    return contents[0], contents[1], contents[2], contents[3], contents[4], contents[5]
+    return contents[0], contents[1], contents[2], contents[3], contents[4]
 
-def main(newURLs, DOWNLOAD_PATH, res):
+def main(newURLs, DOWNLOAD_PATH):
     if newURLs == None:
         print('No new URLs')
         return
@@ -155,30 +114,27 @@ def main(newURLs, DOWNLOAD_PATH, res):
         return
     else:
         print(f"LIST OF NEW URLS: {', '.join(newURLs)}")
-        for i in newURLs:
-            if res == "STABLE":
-                downloadVideoSTABLE(i, DOWNLOAD_PATH)
-            else:
-                downloadVideoBEST(i, DOWNLOAD_PATH)
+        for i in newURLs: 
+            downloadVideo(i, DOWNLOAD_PATH)
             #Add the now downloaded URLs to the previousURLs.txt file
             with open(PREV_TXT_PATH, 'a+') as File:
                 File.write(i+'\n')
 
-def DropboxMain(FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH, RES):
+def DropboxMain(FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH):
     Dropbox = DropboxInterface(FETCH_FILE_NAME, PREV_TXT_PATH, DBX_ACCESS_TOKEN)
-    main(Dropbox.fetchNewFileData(), DOWNLOAD_PATH, RES)
+    main(Dropbox.fetchNewFileData(), DOWNLOAD_PATH)
 
-def LocalMain(FETCH_FILE_NAME, PREV_TXT_PATH, DOWNLOAD_PATH, RES):
+def LocalMain(FETCH_FILE_NAME, PREV_TXT_PATH, DOWNLOAD_PATH):
     Local = LocalInterface(FETCH_FILE_NAME, PREV_TXT_PATH)
-    main(Local.fetchNewFileData(), DOWNLOAD_PATH, RES)
+    main(Local.fetchNewFileData(), DOWNLOAD_PATH)
 
 
 
 
 if __name__ == '__main__':
     wait_for_internet_connection()
-    STORE_SERVICE, FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH, RES = fetchConfig()
+    STORE_SERVICE, FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH = fetchConfig()
     if STORE_SERVICE.lower() == "dropbox":
-        DropboxMain(FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH, RES)
+        DropboxMain(FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH)
     if STORE_SERVICE.lower() == "local":
-        LocalMain(FETCH_FILE_NAME, PREV_TXT_PATH, DOWNLOAD_PATH, RES)
+        LocalMain(FETCH_FILE_NAME, PREV_TXT_PATH, DOWNLOAD_PATH)
