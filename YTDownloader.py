@@ -14,11 +14,38 @@ def wait_for_internet_connection(url='http://www.example.com', timeout=3):
             pass
 
 def downloadVideo(url, path=None):
-    print(f'DOWNLOADING VIDEO {url}...')
+    print(f'CHECKING VIDEO WITH URL: {url}...')
     yt = YouTube(url)
+
+    # Prepare temp-dir
+    os.system('mkdir {0}/tmp'.format(path))
+
+    # Replace illegal characters in Windows
     title = yt.title
-    ys = yt.streams.get_highest_resolution()
-    ys.download(path)
+    illegalchar = '":\\\*<>?|/'
+    translation_table = dict.fromkeys(map(ord, illegalchar), None)
+    title = title.translate(translation_table)
+    print(f'REPLACED ILLEGAL CHARACTERS IN VIDEO TITLE')
+
+    # Download at max resolution whether adaptive or progressive
+    # Video comes without sound. Need to download both
+    print(f'DOWNLOADING VIDEO...')
+    yv = yt.streams.filter(file_extension='mp4').order_by('resolution').last()
+    yv.download('{0}/tmp'.format(path), filename='video')
+
+    # Then download sound
+    print(f'DOWNLOADING AUDIO...')
+    ya = yt.streams.get_audio_only()
+    ya.download('{0}/tmp'.format(path), filename='audio')
+
+    # Splice video and sound together using FFMPEG
+    # !! BEWARE !! UTILIZES CPU 100%
+    va = ffmpeg.input('{0}/tmp/audio.mp4'.format(path))
+    vv = ffmpeg.input('{0}/tmp/video.mp4'.format(path))
+    ffmpeg.concat(vv, va, v=1, a=1).output('{0}/{1}.mp4'.format(path, title)).run()
+
+    # Cleanup temp-files
+    os.system('rm -r {0}/tmp'.format(path))
 
 def downloadFile(dbx, folder, name):
     # This is copied straight from the dropbox sdk docs.
