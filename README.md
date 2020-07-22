@@ -1,4 +1,5 @@
 # AutoYouTubeLikeDownloader
+## NOTE - Not added support for ultra resolution yet. Hold tight for a bit!!
 Uses IFTTT, Dropbox and a Raspberry Pi to automatically download and store *new* YouTube videos you've liked. Perfect for automatic data hoarding! 
 
 Alternatiely, this can be used to download a large quantity of YouTube videos without dodgy online websites. Instructions for both options are below!
