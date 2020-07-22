@@ -1,6 +1,6 @@
 import os, dropbox, requests
 from pytube import YouTube
-
+from pytube.cli import on_progress 
 
 def wait_for_internet_connection(url='http://www.example.com', timeout=3):
     print('Waiting for an internet connection...')
@@ -15,7 +15,7 @@ def wait_for_internet_connection(url='http://www.example.com', timeout=3):
 
 def downloadVideo(url, path=None):
     print(f'CHECKING VIDEO WITH URL: {url}...')
-    yt = YouTube(url)
+    yt = YouTube(url, on_progress_callback=on_progress)
 
     # Prepare temp-dir
     os.system('mkdir {0}/tmp'.format(path))
@@ -31,11 +31,13 @@ def downloadVideo(url, path=None):
     # Video comes without sound. Need to download both
     print(f'DOWNLOADING VIDEO...')
     yv = yt.streams.filter(file_extension='mp4').order_by('resolution').last()
+    print(f'FILESIZE: ' + str(round(yv.filesize/(1024*1024), 2)) + 'MB')
     yv.download('{0}/tmp'.format(path), filename='video')
 
     # Then download sound
     print(f'DOWNLOADING AUDIO...')
     ya = yt.streams.get_audio_only()
+    print(f'FILESIZE: ' + str(round(ya.filesize/(1024*1024), 2)) + 'MB')
     ya.download('{0}/tmp'.format(path), filename='audio')
 
     # Splice video and sound together using FFMPEG
