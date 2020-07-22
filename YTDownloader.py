@@ -91,8 +91,6 @@ def downloadVideoBEST(url, path='./'):
 
     # Replace illegal characters in Windows
     title = yt.title
-    ys = yt.streams.get_highest_resolution()
-    ys.download(path)
     illegalchar = '":\\\*<>?|/'
     translation_table = dict.fromkeys(map(ord, illegalchar), None)
     title = title.translate(translation_table)
