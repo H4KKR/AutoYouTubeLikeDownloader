@@ -30,3 +30,9 @@ PREV_TXT_PATH = "previousURLs.txt"
 # an exteral harddrive, put the path of that here. If not, it will download to the 
 # same directory as the py file.
 DOWNLOAD_PATH = ""
+
+# Change this value to "MAX" if you want to download your videos in the maximum available
+# resolution. Note, if running this on a pi you will reach 100% CPU usage. That is fine if you
+# aren't running anything else on the pi. 
+# Else, keep on "STABLE"
+RESOLUTION = "STABLE"
