@@ -81,4 +81,7 @@ __Congratulations!!__ You now have an automatic YouTube Video downloader, so you
 
 __Congratulations!!__ You now have an easy way to download a lot of YouTube videos at once! Just populate the file however you see fit, however many times you'd like and just keep running the py file to download all your YouTube videos. 
 
-I would really recommed checking out this workaround for how to download your historically liked videos. It involves a chromecast, which if you are lucky enough to have then you can do it! You can then use the `youtube-dl` command line tool to extract the IDs of each of the videos, seen in this tutorial. Then with a script that I will add to the GitHub in a few days, you can convert those IDs into urls which can be downloaded by this Python program in the git already!! Very exciting stuff.
+I would really recommed checking out [this workaround]("https://www.youtube.com/watch?v=9fhZCV5VIvA&feature=youtu.be") for how to download your historically liked videos. It involves a chromecast, which if you are lucky enough to have then you can do it! Stick with the video, it's one of those stereotypical tech tutorials straight out of the early 2000s (even though it's from 2020!). All it needs now is no speaking, typing in Notepad and some royalty-free bangers!!
+You can then use the `youtube-dl` command line tool to extract the IDs of each of the videos. 
+Type `youtube-dl -j --flat-playlist 'https://www.youtube.com/watch?v=gdOwwI0ngqQ&list=PLPpZI8R1zUfrkDbmJMOBhEbJ9Td9vbV-F'`
+Then with a script that I will add to the GitHub in a few days, you can convert those IDs into urls which can be downloaded by this Python program in the git already!! Very exciting stuff. You can also download with the youtube-dl tool itself.
