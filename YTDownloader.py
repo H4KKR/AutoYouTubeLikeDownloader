@@ -1,6 +1,7 @@
-import os, dropbox, requests
+import os, dropbox, requests, ffmpeg
 from pytube import YouTube
-# This code isn't yet commented. I'll go through and do that some other time. 
+from pytube.cli import on_progress
+# This code isn't yet commented. I'll go through and do that some other time.
 
 digest = lambda URLs: [''.join(i.split()) for i in URLs if i != '']
 
@@ -35,7 +36,7 @@ class DropboxInterface(LocalInterface):
         self.prev_path = prev_path
         self.fetch_data = self.fetchDBFileData(self.fetch_path)
         self.prev_data = fetchFileData(prev_path)
-        
+
     def downloadFile(self, path):
         # This is copied straight from the dropbox sdk docs.
         # If it aint broken, don't fix it!!
@@ -50,9 +51,9 @@ class DropboxInterface(LocalInterface):
 
     def fetchDBFileData(self, fetch_path):
         if fetch_path[0] != "/":
-            fetch_path = "/" + fetch_path 
+            fetch_path = "/" + fetch_path
 
-  
+
         print(fetch_path)
         return self.downloadFile(fetch_path).decode('utf-8').split('\n')
 
@@ -73,13 +74,35 @@ class DropboxInterface(LocalInterface):
             contents = digest(File.read().split('\n'))
 
         #Get rid of previously downloaded videos
-        for x in contents: 
+        for x in contents:
             try: URLs.remove(x)
             except: pass
         print(URLs)
         return URLs
 
-def downloadVideo(url, path):
+
+def downloadVideoBEST(url, path=None):
+    print(f'CHECKING VIDEO WITH URL: {url}...')
+    yt = YouTube(url)
+    print('made instance')
+    yt = YouTube(url, on_progress_callback=on_progress)
+
+    # Prepare temp-dir
+    os.system('mkdir {0}/tmp'.format(path))
+    # Video comes without sound. Need to download both
+    print(f'DOWNLOADING VIDEO...')
+    yv = yt.streams.filter(file_extension='mp4').order_by('resolution').last()
+    print(f'FILESIZE: ' + str(round(yv.filesize/(1024*1024), 2)) + 'MB')
+    yv.download('{0}/tmp'.format(path), filename='video')
+
+    # Then download sound
+    print(f'DOWNLOADING AUDIO...')
+    ya = yt.streams.get_audio_only()
+    print(f'FILESIZE: ' + str(round(ya.filesize/(1024*1024), 2)) + 'MB')
+    ya.download('{0}/tmp'.format(path), filename='audio')
+
+
+def downloadVideoSTABLE(url, path):
     print(f'DOWNLOADING VIDEO {url}...')
     yt = YouTube(url)
     title = yt.title
@@ -103,9 +126,9 @@ def fetchConfig(config_file_path="config.txt"):
     contents = digest([i for i in File.read().split('\n') if "#" not in i])
     contents = [i[i.index("\"")+1:-1] for i in contents]
     print(contents)
-    return contents[0], contents[1], contents[2], contents[3], contents[4]
+    return contents[0], contents[1], contents[2], contents[3], contents[4], contents[5]
 
-def main(newURLs, DOWNLOAD_PATH):
+def main(newURLs, DOWNLOAD_PATH, res):
     if newURLs == None:
         print('No new URLs')
         return
@@ -114,27 +137,30 @@ def main(newURLs, DOWNLOAD_PATH):
         return
     else:
         print(f"LIST OF NEW URLS: {', '.join(newURLs)}")
-        for i in newURLs: 
-            downloadVideo(i, DOWNLOAD_PATH)
+        for i in newURLs:
+            if res == "STABLE":
+                downloadVideoSTABLE(i, DOWNLOAD_PATH)
+            else:
+                downloadVideoBEST(i, DOWNLOAD_PATH)
             #Add the now downloaded URLs to the previousURLs.txt file
             with open(PREV_TXT_PATH, 'a+') as File:
                 File.write(i+'\n')
 
-def DropboxMain(FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH):
+def DropboxMain(FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH, RES):
     Dropbox = DropboxInterface(FETCH_FILE_NAME, PREV_TXT_PATH, DBX_ACCESS_TOKEN)
-    main(Dropbox.fetchNewFileData(), DOWNLOAD_PATH)
+    main(Dropbox.fetchNewFileData(), DOWNLOAD_PATH, RES)
 
-def LocalMain(FETCH_FILE_NAME, PREV_TXT_PATH, DOWNLOAD_PATH):
+def LocalMain(FETCH_FILE_NAME, PREV_TXT_PATH, DOWNLOAD_PATH, RES):
     Local = LocalInterface(FETCH_FILE_NAME, PREV_TXT_PATH)
-    main(Local.fetchNewFileData(), DOWNLOAD_PATH)
+    main(Local.fetchNewFileData(), DOWNLOAD_PATH, RES)
 
 
 
 
 if __name__ == '__main__':
     wait_for_internet_connection()
-    STORE_SERVICE, FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH = fetchConfig()
+    STORE_SERVICE, FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH, RES = fetchConfig()
     if STORE_SERVICE.lower() == "dropbox":
-        DropboxMain(FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH)
+        DropboxMain(FETCH_FILE_NAME, DBX_ACCESS_TOKEN, PREV_TXT_PATH, DOWNLOAD_PATH, RES)
     if STORE_SERVICE.lower() == "local":
-        LocalMain(FETCH_FILE_NAME, PREV_TXT_PATH, DOWNLOAD_PATH)
+        LocalMain(FETCH_FILE_NAME, PREV_TXT_PATH, DOWNLOAD_PATH, RES)
