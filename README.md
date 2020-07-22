@@ -61,7 +61,7 @@ _That's it!!_
     - Navigate to the bottom of the file. 
     - Enter the new line `0 * * * * python3 /home/pi/Desktop/YTDownloader.py` to run this script every hour. You may decide you wish to run the script every day instead, in which case change `0 * * * *` to `0 0 * * *`.
     - Press `ctrl x`, `y`, `Enter` to exit the editor.
-4. Install the required dependencies. In this case, they are `dropbox` and `pytube3`, assuming `requests` and `os` are already installed. They can be installed using pip, in the usual fashion. 
+4. Install the required dependencies. In this case, they are `dropbox`, `ffmpeg` and `pytube3`, assuming `requests` and `os` are already installed. They can be installed using pip, in the usual fashion. Note, `ffmpeg` also requires an install on the system. On a pi, run `sudo apt-get install ffmpeg`, and on mac run `brew install ffmpeg`.
 
 *Note!* crontab doesn't give errors, or even open a terminal window. It just runs in the background - so there is no way to determine whether the install has been successful unless you run this yourself by typing the command `python3 /home/pi/Desktop/YTDownloader.py`
 
@@ -77,7 +77,7 @@ __Congratulations!!__ You now have an automatic YouTube Video downloader, so you
     - Change DBX_ACCESS_TOKEN to `""`.
     - Change PREV_TXT_PATH to the path taken to reach your previousURLs.txt file. This is usually `/home/pi/Desktop/previousURLs.txt`if you put it on a Raspberry Pi's Desktop. This file is required by the program, but it can be empty and its intended purpose not used. 
     - If you wish for the YouTube video to download to a seperate folder (not in the same directory as the py file, so perhaps an external drive or NAS), then change the "DOWNLOAD_PATH" variable from `""` to a string of the desired destination. (eg "/media/Drive5/YouTubeVids")
-3. Install the `dropbox` and `pytube3` dependencies (even though you're not using the dropbox library, it still needs to be downloaded.) using pip, in the usual fashion.
+3. Install the required dependencies. In this case, they are `dropbox`, `ffmpeg` and `pytube3`, assuming `requests` and `os` are already installed. They can be installed using pip, in the usual fashion. Note, `ffmpeg` also requires an install on the system. On a pi, run `sudo apt-get install ffmpeg`, and on mac run `brew install ffmpeg`.
 4. Navigate to the py file, and run it.
 
 __Congratulations!!__ You now have an easy way to download a lot of YouTube videos at once! Just populate the file however you see fit, however many times you'd like and just keep running the py file to download all your YouTube videos. 
