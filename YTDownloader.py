@@ -29,7 +29,7 @@ class LocalInterface():
 
 class DropboxInterface(LocalInterface):
     def __init__(self, fetch_path, prev_path, DBX_ACCESS_TOKEN):
-        super().__init__(fetch_path, prev_path)
+        #super().__init__(fetch_path, prev_path)
         self.dbx = dropbox.Dropbox(DBX_ACCESS_TOKEN)
         self.DBX_ACCESS_TOKEN = DBX_ACCESS_TOKEN
         self.fetch_path = fetch_path
