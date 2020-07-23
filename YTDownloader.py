@@ -82,6 +82,7 @@ class DropboxInterface(LocalInterface):
 
 
 def downloadVideoBEST(url, path='./'):
+    path.replace(' ', '\ ')
     print(f'DOWNLOADING VIDEO {url}...')
     print(f'CHECKING VIDEO WITH URL: {url}...')
     yt = YouTube(url)
