@@ -13,19 +13,20 @@ The first method covered will be the hardest, which sets up the script to downlo
 The second method is for bulk downloading YouTube videos from a locally stored list.
 
 Both methods require the same initial setup, covered here:
-1. Use `pip` to install the `pytube3` library, by typing this command:
-`pip install pytube3`
+1. Use `pip` to install the `pytubeX` library, by typing this command:
+`pip install pytubeX`
 
-- Unfortunately, the `pytube3` library is a little bit broken - __BUT ONLY IN ONE PLACE!__ I am currently working on rewriting the code to work with a different library, but in the mean time here're the instructions for the work around. 
+- `pytubeX` is my own creation. It is a fork from the `pytube3` library, which has gone unmaintained for a while and has since broken. All tutorials on the internet for `pytube3` will work with `pytubeX`, since all bugs were under-the-hood.
+
 
 <details>
-  <summary>More info on bug</summary>
-The devs behind pytube3 are not the most active, and the YouTube site changed which broke the code. For those interested, [here's the StackOverflow]("https://stackoverflow.com/questions/61960657/getting-keyerror-url-with-pytube") of the error you will get if you don't do this really easy fix.
-</details>
-
+  <summary>Instructions for cavemen wanting to use `pytube3`</summary>
 1. Type on your command line/terminal `pip show pytube3`, and head to the shown path.
 2. Open the folder "pytube" when in the folder previously shown, and scroll to the py file "extract.py"
 3. Scroll to line 301. Change the word in the square brackets from `["cipher"]` to `["signatureCipher"]`. _That's it!_ You've now solved the problem. 
+
+</details>
+
 
 
 ## OPTION 1 - AUTOMATIC YOUTUBE VIDEO DOWNLOADER FROM LIKES
